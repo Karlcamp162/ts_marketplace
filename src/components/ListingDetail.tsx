@@ -120,7 +120,7 @@ export default function ListingDetail() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Listing Not Found</h1>
-          <p className="text-gray-600 mb-6">The listing you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 mb-6">The listing you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <Link href="/marketplace">
             <Button>Back to Marketplace</Button>
           </Link>

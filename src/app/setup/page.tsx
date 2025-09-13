@@ -31,7 +31,7 @@ export default function SetupPage() {
               <ol className="list-decimal list-inside space-y-2 text-gray-700">
                 <li>Go to <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">supabase.com</a></li>
                 <li>Sign up or log in to your account</li>
-                <li>Click "New Project"</li>
+                <li>Click &quot;New Project&quot;</li>
                 <li>Choose your organization and enter a project name</li>
                 <li>Set a database password (save this securely)</li>
                 <li>Choose a region close to your users</li>

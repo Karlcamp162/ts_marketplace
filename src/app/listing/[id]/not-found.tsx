@@ -7,7 +7,7 @@ export default function NotFound() {
       <div className="text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Listing Not Found</h1>
         <p className="text-gray-600 mb-8">
-          The listing you're looking for doesn't exist or has been removed.
+          The listing you&apos;re looking for doesn&apos;t exist or has been removed.
         </p>
         <Link href="/">
           <Button>Back to Marketplace</Button>
