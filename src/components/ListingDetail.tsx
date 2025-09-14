@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, MessageCircle, Heart, Share2, MoreHorizontal, MapPin, Calendar, User, ChevronLeft, ChevronRight, Bookmark } from 'lucide-react';
+import { MessageCircle, Heart, Share2, MoreHorizontal, ChevronLeft, ChevronRight, Bookmark } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import MessageModal from './MessageModal';
 
 interface Listing {
@@ -35,15 +36,7 @@ export default function ListingDetail() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
-  useEffect(() => {
-    if (listingId) {
-      fetchListing();
-    } else {
-      setLoading(false);
-    }
-  }, [listingId]);
-
-  const fetchListing = async () => {
+  const fetchListing = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('listings')
@@ -62,7 +55,15 @@ export default function ListingDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [listingId]);
+
+  useEffect(() => {
+    if (listingId) {
+      fetchListing();
+    } else {
+      setLoading(false);
+    }
+  }, [listingId, fetchListing]);
 
   const handleSubmitMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,16 +150,16 @@ export default function ListingDetail() {
           </div>
           
           <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+            <Button type="button" variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0" aria-label="Message">
               <MessageCircle className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+            <Button type="button" variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0" aria-label="Like listing">
               <Heart className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+            <Button type="button" variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0" aria-label="Share listing">
               <Share2 className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+            <Button type="button" variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0" aria-label="More options">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </div>
@@ -169,16 +170,26 @@ export default function ListingDetail() {
         {/* Left side - Image */}
         <div className="flex-1 relative bg-gray-100">
           <div className="relative h-full flex items-center justify-center">
-            <img
+            <Image
               src={listing.image_url}
               alt={listing.title}
-              className="max-w-full max-h-full object-contain"
+              width={800}
+              height={600}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
             />
             {/* Image navigation arrows */}
-            <button className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-opacity">
+            <button 
+              type="button"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-opacity"
+              aria-label="Previous image"
+            >
               <ChevronLeft className="w-6 h-6" />
             </button>
-            <button className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-opacity">
+            <button 
+              type="button"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70 transition-opacity"
+              aria-label="Next image"
+            >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
@@ -200,19 +211,21 @@ export default function ListingDetail() {
             {/* Action Buttons */}
             <div className="flex space-x-2">
               <Button 
+                type="button"
                 onClick={() => setIsMessageModalOpen(true)}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-9"
+                aria-label="Send message"
               >
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Message
               </Button>
-              <Button variant="outline" size="sm" className="h-9 w-9 p-0">
+              <Button type="button" variant="outline" size="sm" className="h-9 w-9 p-0" aria-label="Save listing">
                 <Bookmark className="w-4 h-4" />
               </Button>
-              <Button variant="outline" size="sm" className="h-9 w-9 p-0">
+              <Button type="button" variant="outline" size="sm" className="h-9 w-9 p-0" aria-label="Share listing">
                 <Share2 className="w-4 h-4" />
               </Button>
-              <Button variant="outline" size="sm" className="h-9 w-9 p-0">
+              <Button type="button" variant="outline" size="sm" className="h-9 w-9 p-0" aria-label="More options">
                 <MoreHorizontal className="w-4 h-4" />
               </Button>
             </div>

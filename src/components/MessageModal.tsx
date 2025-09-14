@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,13 +30,7 @@ export default function MessageModal({ isOpen, onClose, listingId, sellerEmail, 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (isOpen && listingId) {
-      fetchMessages();
-    }
-  }, [isOpen, listingId]);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('messages')
@@ -61,7 +55,13 @@ export default function MessageModal({ isOpen, onClose, listingId, sellerEmail, 
     } finally {
       setLoading(false);
     }
-  };
+  }, [listingId, buyerEmail]);
+
+  useEffect(() => {
+    if (isOpen && listingId) {
+      fetchMessages();
+    }
+  }, [isOpen, listingId, fetchMessages]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,7 +123,14 @@ export default function MessageModal({ isOpen, onClose, listingId, sellerEmail, 
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 rounded-full p-0">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="h-8 w-8 rounded-full p-0"
+              aria-label="Go back"
+            >
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <div>
@@ -131,7 +138,14 @@ export default function MessageModal({ isOpen, onClose, listingId, sellerEmail, 
               <p className="text-sm text-gray-500">with seller</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 rounded-full p-0">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="h-8 w-8 rounded-full p-0"
+            aria-label="Close dialog"
+          >
             <X className="w-4 h-4" />
           </Button>
         </div>
@@ -183,9 +197,11 @@ export default function MessageModal({ isOpen, onClose, listingId, sellerEmail, 
                 className="w-full"
               />
               <Button
+                type="button"
                 onClick={() => setBuyerEmail(buyerEmail)}
                 className="w-full bg-blue-600 hover:bg-blue-700"
                 disabled={!buyerEmail.trim()}
+                aria-label="Start conversation"
               >
                 Start Conversation
               </Button>

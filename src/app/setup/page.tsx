@@ -1,12 +1,10 @@
 import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Copy, CheckCircle } from 'lucide-react';
+import { ExternalLink, CheckCircle } from 'lucide-react';
+import CopyButton from '@/components/CopyButton';
 
 export default function SetupPage() {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -76,20 +74,16 @@ export default function SetupPage() {
             <CardContent className="space-y-4">
               <p>Create a <code className="bg-gray-100 px-2 py-1 rounded">.env.local</code> file in your project root with the following content:</p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg relative">
-                <Button
-                  size="sm"
-                  variant="outline"
+                <CopyButton
                   className="absolute top-2 right-2 text-gray-300 hover:text-white"
-                  onClick={() => copyToClipboard(`NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+                  text={`NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password`)}
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
+EMAIL_PASS=your_app_password`}
+                />
                 <pre className="text-sm overflow-x-auto">
 {`NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
